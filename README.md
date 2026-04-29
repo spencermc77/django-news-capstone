@@ -1,46 +1,37 @@
 # Django News Application Capstone
 
-## Overview
-This project is a Django-based news application that allows users to create, manage, and view articles and newsletters. It includes role-based permissions and a RESTful API with authentication.
+## Description
+This is a Django-based News Application project. It includes models for articles, users, newsletters, and publishers.
 
-## Features
-- Custom user roles: Reader, Journalist, Editor
-- Article creation and approval system
-- Newsletter creation and management
-- Role-based access control using Django groups
-- REST API built with Django REST Framework
-- JWT authentication for API access
-- Automated unit tests
-- MariaDB database integration
+## Installation
 
-## Technologies Used
-- Python
-- Django
-- Django REST Framework
-- MariaDB (MySQL)
-- PyMySQL
+1. Clone the repository
+2. Navigate into the project folder
+3. Install dependencies:
 
-## Setup Instructions
-1. Install dependencies:
-   pip install -r requirements.txt
+pip install -r requirements.txt
 
-2. Run migrations:
-   python manage.py migrate
+4. Run the server:
 
-3. Create a superuser:
-   python manage.py createsuperuser
+python manage.py runserver
 
-4. Run the development server:
-   python manage.py runserver
+## Docker
 
-## API Authentication
-JWT authentication is implemented. Obtain a token at:
-http://127.0.0.1:8000/api/token/
+To run using Docker:
 
-## Database
-This project uses MariaDB instead of SQLite. The database configuration is defined in:
-news_project/settings.py
+docker build -t newsapp .
 
-## Notes
-- The `venv` folder is excluded from submission.
-- SQLite database files are not included since MariaDB is used.
+docker run -p 8000:8000 newsapp
+
+## Documentation
+
+Sphinx documentation is included in the project under the build/html directory.
+
+Open:
+
+build/html/index.html
+
+to view the documentation.
+
+## Author
+Spencer McNamara
