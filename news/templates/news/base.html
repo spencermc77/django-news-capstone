@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Django News Application</title>
+</head>
+<body>
+    <h1>Django News Application</h1>
+
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/articles/">Articles</a> |
+        <a href="/articles/create/">Create Article</a> |
+        <a href="/articles/pending/">Pending Articles</a> |
+        <a href="/newsletters/">Newsletters</a> |
+        <a href="/newsletters/create/">Create Newsletter</a> |
+        <a href="/admin/">Admin</a>
+    </nav>
+
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

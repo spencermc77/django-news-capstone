@@ -1,0 +1,28 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<h2>{{ newsletter.title }}</h2>
+
+<p><strong>Author:</strong> {{ newsletter.author.username }}</p>
+
+<p>{{ newsletter.description }}</p>
+
+<h3>Articles in this newsletter</h3>
+
+{% if newsletter.articles.all %}
+    {% for article in newsletter.articles.all %}
+        <div>
+            <h4>
+                <a href="/articles/{{ article.id }}/">{{ article.title }}</a>
+            </h4>
+            <p>{{ article.content|truncatewords:25 }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No articles added to this newsletter.</p>
+{% endif %}
+
+<p>
+    <a href="/newsletters/">Back to newsletters</a>
+</p>
+{% endblock %}

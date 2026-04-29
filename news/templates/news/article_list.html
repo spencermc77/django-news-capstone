@@ -1,0 +1,20 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<h2>Approved Articles</h2>
+
+{% if articles %}
+    {% for article in articles %}
+        <div>
+            <h3>
+                <a href="/articles/{{ article.id }}/">{{ article.title }}</a>
+            </h3>
+            <p>{{ article.content|truncatewords:30 }}</p>
+            <p>Author: {{ article.author.username }}</p>
+            <hr>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No approved articles yet.</p>
+{% endif %}
+{% endblock %}

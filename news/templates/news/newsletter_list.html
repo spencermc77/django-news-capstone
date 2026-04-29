@@ -1,0 +1,20 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<h2>Newsletters</h2>
+
+{% if newsletters %}
+    {% for newsletter in newsletters %}
+        <div>
+            <h3>
+                <a href="/newsletters/{{ newsletter.id }}/">{{ newsletter.title }}</a>
+            </h3>
+            <p>{{ newsletter.description }}</p>
+            <p>Author: {{ newsletter.author.username }}</p>
+            <hr>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No newsletters yet.</p>
+{% endif %}
+{% endblock %}

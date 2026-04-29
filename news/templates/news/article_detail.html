@@ -1,0 +1,17 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<h2>{{ article.title }}</h2>
+
+<p><strong>Author:</strong> {{ article.author.username }}</p>
+
+{% if article.publisher %}
+<p><strong>Publisher:</strong> {{ article.publisher.name }}</p>
+{% endif %}
+
+<p>{{ article.content }}</p>
+
+<p>
+    <a href="/articles/">Back to articles</a>
+</p>
+{% endblock %}
