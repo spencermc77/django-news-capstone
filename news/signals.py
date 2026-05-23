@@ -1,10 +1,11 @@
+from django.contrib.auth.models import Group, Permission
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
-from django.contrib.auth.models import Group, Permission
 
 
 @receiver(post_migrate)
 def create_groups(sender, **kwargs):
+    """Create user groups and assign permissions after migrations."""
     if sender.name != 'news':
         return
 
@@ -18,27 +19,40 @@ def create_groups(sender, **kwargs):
             'add_article',
             'change_article',
             'delete_article',
+            'can_approve_article',
             'view_newsletter',
             'add_newsletter',
             'change_newsletter',
             'delete_newsletter',
+            'view_publisher',
+            'add_publisher',
+            'change_publisher',
+            'delete_publisher',
         ]
     )
 
-    permission_dict = {permission.codename: permission for permission in permissions}
+    permission_dict = {
+        permission.codename: permission for permission in permissions
+    }
 
     reader_group.permissions.set([
         permission_dict['view_article'],
         permission_dict['view_newsletter'],
+        permission_dict['view_publisher'],
     ])
 
     editor_group.permissions.set([
         permission_dict['view_article'],
         permission_dict['change_article'],
         permission_dict['delete_article'],
+        permission_dict['can_approve_article'],
         permission_dict['view_newsletter'],
         permission_dict['change_newsletter'],
         permission_dict['delete_newsletter'],
+        permission_dict['view_publisher'],
+        permission_dict['add_publisher'],
+        permission_dict['change_publisher'],
+        permission_dict['delete_publisher'],
     ])
 
     journalist_group.permissions.set([
@@ -50,4 +64,5 @@ def create_groups(sender, **kwargs):
         permission_dict['add_newsletter'],
         permission_dict['change_newsletter'],
         permission_dict['delete_newsletter'],
+        permission_dict['view_publisher'],
     ])

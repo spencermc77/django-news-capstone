@@ -5,20 +5,28 @@
 
 {% if articles %}
     {% for article in articles %}
-        <div>
-            <h3>{{ article.title }}</h3>
-            <p>{{ article.content|truncatewords:30 }}</p>
-            <p>Author: {{ article.author.username }}</p>
+        <hr>
 
-            <form method="post" action="/articles/{{ article.id }}/approve/">
-                {% csrf_token %}
-                <button type="submit">Approve Article</button>
-            </form>
+        <h3>{{ article.title }}</h3>
 
-            <hr>
-        </div>
+        <p>
+            <strong>Author:</strong>
+            {{ article.author.username }}
+        </p>
+
+        <p>
+            {{ article.content }}
+        </p>
+
+        <form method="post" action="/articles/{{ article.id }}/approve/">
+            {% csrf_token %}
+            <button type="submit">
+                Approve Article
+            </button>
+        </form>
     {% endfor %}
 {% else %}
     <p>No pending articles.</p>
 {% endif %}
+
 {% endblock %}

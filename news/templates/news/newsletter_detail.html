@@ -3,26 +3,48 @@
 {% block content %}
 <h2>{{ newsletter.title }}</h2>
 
-<p><strong>Author:</strong> {{ newsletter.author.username }}</p>
-
-<p>{{ newsletter.description }}</p>
-
-<h3>Articles in this newsletter</h3>
-
-{% if newsletter.articles.all %}
-    {% for article in newsletter.articles.all %}
-        <div>
-            <h4>
-                <a href="/articles/{{ article.id }}/">{{ article.title }}</a>
-            </h4>
-            <p>{{ article.content|truncatewords:25 }}</p>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>No articles added to this newsletter.</p>
-{% endif %}
+<p>
+    <strong>Author:</strong> {{ newsletter.author.username }}
+</p>
 
 <p>
-    <a href="/newsletters/">Back to newsletters</a>
+    <strong>Description:</strong>
 </p>
+
+<p>
+    {{ newsletter.description }}
+</p>
+
+<hr>
+
+<h3>Articles</h3>
+
+{% if newsletter.articles.all %}
+    <ul>
+        {% for article in newsletter.articles.all %}
+            <li>{{ article.title }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No articles assigned.</p>
+{% endif %}
+
+<hr>
+
+{% if user.is_authenticated %}
+    {% if user == newsletter.author or perms.news.can_approve_article %}
+        <p>
+            <a href="/newsletters/{{ newsletter.id }}/edit/">
+                Edit Newsletter
+            </a>
+        </p>
+
+        <p>
+            <a href="/newsletters/{{ newsletter.id }}/delete/">
+                Delete Newsletter
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
 {% endblock %}

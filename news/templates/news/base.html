@@ -13,7 +13,21 @@
         <a href="/articles/pending/">Pending Articles</a> |
         <a href="/newsletters/">Newsletters</a> |
         <a href="/newsletters/create/">Create Newsletter</a> |
-        <a href="/admin/">Admin</a>
+        <a href="/publishers/">Publishers</a> |
+        <a href="/publishers/create/">Create Publisher</a> |
+        <a href="/subscriptions/">Subscriptions</a> |
+        <a href="/admin/">Admin</a> |
+
+        {% if user.is_authenticated %}
+            Logged in as {{ user.username }} |
+            <form method="post" action="/logout/" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="/login/">Login</a> |
+            <a href="/register/">Register</a>
+        {% endif %}
     </nav>
 
     <hr>

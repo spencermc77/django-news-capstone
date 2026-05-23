@@ -3,15 +3,45 @@
 {% block content %}
 <h2>{{ article.title }}</h2>
 
-<p><strong>Author:</strong> {{ article.author.username }}</p>
-
-{% if article.publisher %}
-<p><strong>Publisher:</strong> {{ article.publisher.name }}</p>
-{% endif %}
-
-<p>{{ article.content }}</p>
+<p>
+    <strong>Author:</strong> {{ article.author.username }}
+</p>
 
 <p>
-    <a href="/articles/">Back to articles</a>
+    <strong>Publisher:</strong>
+    {% if article.publisher %}
+        {{ article.publisher.name }}
+    {% else %}
+        None
+    {% endif %}
 </p>
+
+<p>
+    <strong>Approved:</strong> {{ article.approved }}
+</p>
+
+<hr>
+
+<p>
+    {{ article.content }}
+</p>
+
+<hr>
+
+{% if user.is_authenticated %}
+    {% if user == article.author or perms.news.can_approve_article %}
+        <p>
+            <a href="/articles/{{ article.id }}/edit/">
+                Edit Article
+            </a>
+        </p>
+
+        <p>
+            <a href="/articles/{{ article.id }}/delete/">
+                Delete Article
+            </a>
+        </p>
+    {% endif %}
+{% endif %}
+
 {% endblock %}

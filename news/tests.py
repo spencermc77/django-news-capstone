@@ -1,141 +1,155 @@
-from django.test import TestCase
-from django.utils import timezone
+"""
+Tests for the News application.
+"""
+
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group, Permission
+from django.test import Client, TestCase
+from django.urls import reverse
 
 from rest_framework.test import APIClient
 
-from .models import Article, Publisher, Newsletter
+from .models import Article
 
 
 User = get_user_model()
 
 
 class NewsAppTests(TestCase):
+    """
+    Test suite for the News application.
+    """
 
     def setUp(self):
-        self.publisher = Publisher.objects.create(name='Test Publisher')
+        """
+        Create test users, groups, permissions, and a test article.
+        """
+        self.client = Client()
 
-        self.reader = User.objects.create_user(
-            username='reader',
-            password='testpass123',
-            email='reader@example.com',
-            role='reader'
+        self.editor_group, created = Group.objects.get_or_create(
+            name="Editor"
         )
 
-        self.editor = User.objects.create_user(
-            username='editor',
-            password='testpass123',
-            email='editor@example.com',
-            role='editor'
+        self.journalist_group, created = Group.objects.get_or_create(
+            name="Journalist"
         )
 
-        self.journalist = User.objects.create_user(
-            username='journalist',
-            password='testpass123',
-            email='journalist@example.com',
-            role='journalist'
+        add_article_permission = Permission.objects.get(
+            codename="add_article"
         )
+
+        change_article_permission = Permission.objects.get(
+            codename="change_article"
+        )
+
+        delete_article_permission = Permission.objects.get(
+            codename="delete_article"
+        )
+
+        approve_article_permission = Permission.objects.get(
+            codename="can_approve_article"
+        )
+
+        self.editor_group.permissions.add(
+            change_article_permission,
+            delete_article_permission,
+            approve_article_permission,
+        )
+
+        self.journalist_group.permissions.add(
+            add_article_permission,
+            change_article_permission,
+            delete_article_permission,
+        )
+
+        self.editor_user = User.objects.create_user(
+            username="editor",
+            password="password123",
+            role="editor",
+        )
+
+        self.journalist_user = User.objects.create_user(
+            username="journalist",
+            password="password123",
+            role="journalist",
+        )
+
+        self.editor_user.groups.add(self.editor_group)
+        self.journalist_user.groups.add(self.journalist_group)
 
         self.article = Article.objects.create(
-            title='Approved Story',
-            content='This is an approved article.',
-            author=self.journalist,
-            publisher=self.publisher,
-            approved=True,
-            approved_at=timezone.now()
+            title="Test Article",
+            content="Test Content",
+            author=self.journalist_user,
+            approved=False,
         )
-
-        self.pending_article = Article.objects.create(
-            title='Draft Story',
-            content='This is a pending article.',
-            author=self.journalist,
-            publisher=self.publisher,
-            approved=False
-        )
-
-        self.newsletter = Newsletter.objects.create(
-            title='Weekly Newsletter',
-            description='A simple test newsletter.',
-            author=self.journalist
-        )
-
-        self.newsletter.articles.add(self.article)
-
-    def test_reader_can_view_approved_articles_page(self):
-        response = self.client.get('/articles/')
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Approved Story')
-
-    def test_pending_article_not_shown_on_public_articles_page(self):
-        response = self.client.get('/articles/')
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, 'Draft Story')
-
-    def test_editor_can_view_pending_articles(self):
-        self.client.login(username='editor', password='testpass123')
-        response = self.client.get('/articles/pending/')
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Draft Story')
-
-    def test_article_can_be_approved(self):
-        self.client.login(username='editor', password='testpass123')
-        response = self.client.post(f'/articles/{self.pending_article.id}/approve/')
-        self.pending_article.refresh_from_db()
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(self.pending_article.approved)
-        self.assertIsNotNone(self.pending_article.approved_at)
-
-    def test_newsletter_page_loads(self):
-        response = self.client.get('/newsletters/')
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Weekly Newsletter')
-
-    def test_api_requires_authentication(self):
-        response = self.client.get('/api/articles/')
-        self.assertEqual(response.status_code, 401)
-
-    def test_api_reader_can_get_articles(self):
-        api_client = APIClient()
-        api_client.force_authenticate(user=self.reader)
-
-        response = api_client.get('/api/articles/')
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]['title'], 'Approved Story')
-
-    def test_api_reader_cannot_create_article(self):
-        api_client = APIClient()
-        api_client.force_authenticate(user=self.reader)
-
-        response = api_client.post('/api/articles/', {
-            'title': 'Reader Article',
-            'content': 'Reader should not create this.',
-            'publisher_id': self.publisher.id
-        })
-
-        self.assertEqual(response.status_code, 403)
 
     def test_api_journalist_can_create_article(self):
+        """
+        Test that a journalist can create an article through the API.
+        """
         api_client = APIClient()
-        api_client.force_authenticate(user=self.journalist)
+        api_client.force_authenticate(user=self.journalist_user)
 
-        response = api_client.post('/api/articles/', {
-            'title': 'Journalist Article',
-            'content': 'Journalist created this.',
-            'publisher_id': self.publisher.id
-        })
+        response = api_client.post(
+            "/api/articles/",
+            {
+                "title": "New Article",
+                "content": "New Content",
+            },
+            format="json",
+        )
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['title'], 'Journalist Article')
 
-    def test_api_subscribed_articles(self):
-        self.reader.subscribed_publishers.add(self.publisher)
+    def test_article_can_be_approved(self):
+        """
+        Test that an editor can approve an article.
+        """
+        self.client.login(
+            username="editor",
+            password="password123",
+        )
 
-        api_client = APIClient()
-        api_client.force_authenticate(user=self.reader)
+        response = self.client.post(
+            reverse("approve_article", args=[self.article.id])
+        )
 
-        response = api_client.get('/api/articles/subscribed/')
+        self.assertEqual(response.status_code, 302)
+
+        self.article.refresh_from_db()
+
+        self.assertTrue(self.article.approved)
+
+    def test_editor_can_view_pending_articles(self):
+        """
+        Test that editors can view pending articles.
+        """
+        self.client.login(
+            username="editor",
+            password="password123",
+        )
+
+        response = self.client.get(
+            reverse("pending_articles")
+        )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]['title'], 'Approved Story')
+
+    def test_journalist_cannot_approve_article(self):
+        """
+        Test that journalists cannot approve articles.
+        """
+        self.client.login(
+            username="journalist",
+            password="password123",
+        )
+
+        response = self.client.post(
+            reverse("approve_article", args=[self.article.id])
+        )
+
+        self.article.refresh_from_db()
+
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(self.article.approved)

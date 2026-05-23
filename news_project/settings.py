@@ -2,13 +2,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = 'django-insecure-test-key'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,9 +17,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'news',
-]
+    'rest_framework_simplejwt',
 
+    'news.apps.NewsConfig',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -33,9 +32,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 ROOT_URLCONF = 'news_project.urls'
-
 
 TEMPLATES = [
     {
@@ -53,25 +50,20 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'news_project.wsgi.application'
 
-
-# ✅ MARIA DB CONNECTION
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'news_db',
         'USER': 'root',
-        'PASSWORD': 'test1234',
+        'PASSWORD': 'root123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
 
-
 AUTH_PASSWORD_VALIDATORS = []
-
 
 LANGUAGE_CODE = 'en-us'
 
@@ -81,18 +73,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 AUTH_USER_MODEL = 'news.CustomUser'
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+DEFAULT_FROM_EMAIL = 'news@example.com'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

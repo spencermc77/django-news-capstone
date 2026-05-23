@@ -1,0 +1,14 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<h2>Manage Subscriptions</h2>
+
+<p>Select the publishers and journalists you want to subscribe to.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Save Subscriptions</button>
+</form>
+{% endblock %}
