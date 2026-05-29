@@ -1,0 +1,215 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 2a61d94..352d87d 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -5,30 +5,35 @@[m
+ This project is a Django-based News Application developed for the HyperionDev Software Engineering Bootcamp.[m
+ [m
+ The application allows:[m
+[32m+[m
+ - Readers to view articles and newsletters[m
+ - Journalists to create and manage articles and newsletters[m
+ - Editors to approve pending articles[m
+ - Users to subscribe to journalists and publishers[m
+ [m
+ The project uses:[m
+[32m+[m
+ - Django[m
+ - Django REST Framework[m
+ - MariaDB/MySQL[m
+ - Django permissions and groups[m
+ - API endpoints[m
+ - Sphinx documentation[m
+[32m+[m[32m- Docker[m
+ [m
+ ---[m
+ [m
+ ## Features[m
+ [m
+ ### Reader Permissions[m
+[32m+[m
+ - View articles[m
+ - View newsletters[m
+ - Subscribe to publishers[m
+ - Subscribe to journalists[m
+ [m
+ ### Journalist Permissions[m
+[32m+[m
+ - Create articles[m
+ - Edit articles[m
+ - Delete articles[m
+[36m@@ -37,6 +42,7 @@[m [mThe project uses:[m
+ - Delete newsletters[m
+ [m
+ ### Editor Permissions[m
+[32m+[m
+ - View pending articles[m
+ - Approve pending articles[m
+ - Manage published content[m
+[36m@@ -47,86 +53,89 @@[m [mThe project uses:[m
+ [m
+ ### 1. Clone the repository[m
+ [m
+[31m-```bash[m
+[31m-git clone <repository_url>[m
+[32m+[m[32m    git clone https://github.com/spencermc77/django-news-capstone.git[m
+[32m+[m[32m    cd django-news-capstone[m
+ [m
+[31m-git clone <repository_url>[m
+[32m+[m[32m### 2. Install dependencies[m
+ [m
+[31m-### 2. Navigate into the project folder[m
+[32m+[m[32m    pip install -r requirements.txt[m
+ [m
+[31m-cd Django-News-Application-Capstone[m
+[32m+[m[32m### 3. Configure the database[m
+ [m
+[31m-### 3. Install dependencies[m
+[32m+[m[32mThis project uses MariaDB/MySQL.[m
+ [m
+[31m-pip install -r requirements.txt[m
+[32m+[m[32mUpdate the database settings in:[m
+ [m
+[31m-### 4. Configure MariaDB/MySQL[m
+[32m+[m[32m    news_project/settings.py[m
+ [m
+[31m-Update the database settings in:[m
+[32m+[m[32mExample database settings:[m
+ [m
+[31m-news_project/settings.py[m
+[32m+[m[32m    DATABASES = {[m
+[32m+[m[32m        'default': {[m
+[32m+[m[32m            'ENGINE': 'django.db.backends.mysql',[m
+[32m+[m[32m            'NAME': 'news_db',[m
+[32m+[m[32m            'USER': 'root',[m
+[32m+[m[32m            'PASSWORD': 'root123',[m
+[32m+[m[32m            'HOST': '127.0.0.1',[m
+[32m+[m[32m            'PORT': '3306',[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+ [m
+[31m-Example configuration:[m
+[32m+[m[32mCreate a MariaDB database named:[m
+ [m
+[31m-DATABASES = {[m
+[31m-'default': {[m
+[31m-'ENGINE': 'django.db.backends.mysql',[m
+[31m-'NAME': 'news_db',[m
+[31m-'USER': 'root',[m
+[31m-'PASSWORD': 'root123',[m
+[31m-'HOST': '127.0.0.1',[m
+[31m-'PORT': '3306',[m
+[31m-}[m
+[31m-}[m
+[32m+[m[32m    news_db[m
+ [m
+[31m-### Create the MariaDB Database[m
+[32m+[m[32mRun migrations:[m
+ [m
+[31m-Before running migrations, create the database manually in HeidiSQL or MariaDB.[m
+[32m+[m[32m    python manage.py makemigrations[m
+[32m+[m[32m    python manage.py migrate[m
+ [m
+[31m-The database should be named:[m
+[32m+[m[32m### 4. Run the application locally[m
+ [m
+[31m-    news_db[m
+[32m+[m[32m    python manage.py runserver[m
+ [m
+[31m-In HeidiSQL:[m
+[31m-1. Connect to MariaDB using the root user.[m
+[31m-2. Right-click in the database list.[m
+[31m-3. Select Create new > Database.[m
+[31m-4. Enter the database name:[m
+[32m+[m[32mOpen the application in a browser:[m
+ [m
+[31m-    news_db[m
+[32m+[m[32m    http://127.0.0.1:8000[m
+ [m
+[31m-5. Click OK.[m
+[32m+[m[32m---[m
+ [m
+[31m-After the database has been created, run:[m
+[32m+[m[32m## Docker Setup[m
+ [m
+[31m-    python manage.py makemigrations[m
+[31m-    python manage.py migrate[m
+[32m+[m[32mBuild the Docker image:[m
+ [m
+[31m-### 5. Run migrations[m
+[32m+[m[32m    docker build -t django-news-app .[m
+ [m
+[31m-python manage.py makemigrations[m
+[32m+[m[32mRun the Docker container:[m
+ [m
+[31m-python manage.py migrate[m
+[32m+[m[32m    docker run -p 8000:8000 django-news-app[m
+ [m
+[31m-### 6. Run the server[m
+[32m+[m[32mOpen the application in a browser:[m
+ [m
+[31m-python manage.py runserver[m
+[32m+[m[32m    http://127.0.0.1:8000[m
+[32m+[m
+[32m+[m[32mNotes:[m
+[32m+[m
+[32m+[m[32m- This project uses MariaDB/MySQL.[m
+[32m+[m[32m- If running locally, MariaDB should be running before migrations.[m
+[32m+[m[32m- If running through Docker, database networking or external database configuration may be required.[m
+[32m+[m[32m- The Dockerfile is located in the root directory of this repository.[m
+ [m
+ ---[m
+ [m
+ ## Running Tests[m
+ [m
+[31m-Run the following command:[m
+[32m+[m[32mRun the test suite:[m
+ [m
+[31m-python manage.py test[m
+[32m+[m[32m    python manage.py test[m
+ [m
+ ---[m
+ [m
+ ## API Endpoint[m
+ [m
+[31m-Article approval API endpoint:[m
+[32m+[m[32mArticle approval endpoint:[m
+ [m
+[31m-/api/approved/[m
+[32m+[m[32m    /api/approved/[m
+ [m
+ ---[m
+ [m
+[36m@@ -134,23 +143,23 @@[m [mArticle approval API endpoint:[m
+ [m
+ The project includes:[m
+ [m
+[31m-* Use Case Diagram[m
+[31m-* Class Diagram[m
+[31m-* Sequence Diagram[m
+[32m+[m[32m- Use Case Diagram[m
+[32m+[m[32m- Class Diagram[m
+[32m+[m[32m- Sequence Diagram[m
+ [m
+[31m-These diagrams are located in the diagrams folder.[m
+[32m+[m[32mThese diagrams are located in:[m
+[32m+[m
+[32m+[m[32m    diagrams/[m
+ [m
+ ---[m
+ [m
+ ## Documentation[m
+ [m
+[31m-Sphinx documentation is included in the docs/build/html directory.[m
+[31m-[m
+[31m-Open:[m
+[32m+[m[32mSphinx documentation is located in:[m
+ [m
+[31m-docs/build/html/index.html[m
+[32m+[m[32m    docs/build/html/index.html[m
+ [m
+[31m-to view the documentation.[m
+[32m+[m[32mOpen this file to view the documentation.[m
+ [m
+ ---[m
+ [m

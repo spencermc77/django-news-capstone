@@ -5,30 +5,35 @@
 This project is a Django-based News Application developed for the HyperionDev Software Engineering Bootcamp.
 
 The application allows:
+
 - Readers to view articles and newsletters
 - Journalists to create and manage articles and newsletters
 - Editors to approve pending articles
 - Users to subscribe to journalists and publishers
 
 The project uses:
+
 - Django
 - Django REST Framework
 - MariaDB/MySQL
 - Django permissions and groups
 - API endpoints
 - Sphinx documentation
+- Docker
 
 ---
 
 ## Features
 
 ### Reader Permissions
+
 - View articles
 - View newsletters
 - Subscribe to publishers
 - Subscribe to journalists
 
 ### Journalist Permissions
+
 - Create articles
 - Edit articles
 - Delete articles
@@ -37,6 +42,7 @@ The project uses:
 - Delete newsletters
 
 ### Editor Permissions
+
 - View pending articles
 - Approve pending articles
 - Manage published content
@@ -47,86 +53,89 @@ The project uses:
 
 ### 1. Clone the repository
 
-```bash
-git clone <repository_url>
+    git clone https://github.com/spencermc77/django-news-capstone.git
+    cd django-news-capstone
 
-git clone <repository_url>
+### 2. Install dependencies
 
-### 2. Navigate into the project folder
+    pip install -r requirements.txt
 
-cd Django-News-Application-Capstone
+### 3. Configure the database
 
-### 3. Install dependencies
-
-pip install -r requirements.txt
-
-### 4. Configure MariaDB/MySQL
+This project uses MariaDB/MySQL.
 
 Update the database settings in:
 
-news_project/settings.py
+    news_project/settings.py
 
-Example configuration:
+Example database settings:
 
-DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.mysql',
-'NAME': 'news_db',
-'USER': 'root',
-'PASSWORD': 'root123',
-'HOST': '127.0.0.1',
-'PORT': '3306',
-}
-}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'news_db',
+            'USER': 'root',
+            'PASSWORD': 'root123',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+    }
 
-### Create the MariaDB Database
-
-Before running migrations, create the database manually in HeidiSQL or MariaDB.
-
-The database should be named:
+Create a MariaDB database named:
 
     news_db
 
-In HeidiSQL:
-1. Connect to MariaDB using the root user.
-2. Right-click in the database list.
-3. Select Create new > Database.
-4. Enter the database name:
-
-    news_db
-
-5. Click OK.
-
-After the database has been created, run:
+Run migrations:
 
     python manage.py makemigrations
     python manage.py migrate
 
-### 5. Run migrations
+### 4. Run the application locally
 
-python manage.py makemigrations
+    python manage.py runserver
 
-python manage.py migrate
+Open the application in a browser:
 
-### 6. Run the server
+    http://127.0.0.1:8000
 
-python manage.py runserver
+---
+
+## Docker Setup
+
+Build the Docker image:
+
+    docker build -t django-news-app .
+
+Run the Docker container:
+
+    docker run -p 8000:8000 django-news-app
+
+Open the application in a browser:
+
+    http://127.0.0.1:8000
+
+Notes:
+
+- This project uses MariaDB/MySQL.
+- If running locally, MariaDB should be running before migrations.
+- If running through Docker, database networking or external database configuration may be required.
+- The Dockerfile is located in the root directory of this repository.
 
 ---
 
 ## Running Tests
 
-Run the following command:
+Run the test suite:
 
-python manage.py test
+    python manage.py test
 
 ---
 
 ## API Endpoint
 
-Article approval API endpoint:
+Article approval endpoint:
 
-/api/approved/
+    /api/approved/
 
 ---
 
@@ -134,23 +143,23 @@ Article approval API endpoint:
 
 The project includes:
 
-* Use Case Diagram
-* Class Diagram
-* Sequence Diagram
+- Use Case Diagram
+- Class Diagram
+- Sequence Diagram
 
-These diagrams are located in the diagrams folder.
+These diagrams are located in:
+
+    diagrams/
 
 ---
 
 ## Documentation
 
-Sphinx documentation is included in the docs/build/html directory.
+Sphinx documentation is located in:
 
-Open:
+    docs/build/html/index.html
 
-docs/build/html/index.html
-
-to view the documentation.
+Open this file to view the documentation.
 
 ---
 
