@@ -123,6 +123,38 @@ Notes:
 
 ---
 
+## Database Setup for Docker
+
+Before running the Docker container, ensure that the MariaDB database already exists and migrations have been applied.
+
+Run migrations locally before starting Docker:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+If using MariaDB installed on the host machine, update the database host in:
+
+    news_project/settings.py
+
+Change:
+
+```python
+'HOST': '127.0.0.1'
+```
+
+To:
+
+```python
+'HOST': 'host.docker.internal'
+```
+
+This allows the Docker container to connect to the MariaDB server running on the Windows host machine.
+
+Docker creates an isolated environment, so localhost inside the container refers to the container itself, not the host machine.
+
+If running MariaDB in a separate Docker container, update the HOST value to the database container name and configure both containers to share the same Docker network.
 ## Running Tests
 
 Run the test suite:
