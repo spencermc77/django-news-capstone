@@ -11,28 +11,27 @@ The application allows:
 - Editors to approve pending articles
 - Users to subscribe to journalists and publishers
 
-The project uses:
+Technologies used:
 
 - Django
 - Django REST Framework
-- MariaDB/MySQL
-- Django permissions and groups
-- API endpoints
-- Sphinx documentation
+- MariaDB / MySQL
 - Docker
+- Sphinx Documentation
+- Django Permissions and Groups
 
 ---
 
-## Features
+# Features
 
-### Reader Permissions
+## Reader Permissions
 
 - View articles
 - View newsletters
 - Subscribe to publishers
 - Subscribe to journalists
 
-### Journalist Permissions
+## Journalist Permissions
 
 - Create articles
 - Edit articles
@@ -41,7 +40,7 @@ The project uses:
 - Edit newsletters
 - Delete newsletters
 
-### Editor Permissions
+## Editor Permissions
 
 - View pending articles
 - Approve pending articles
@@ -49,152 +48,196 @@ The project uses:
 
 ---
 
-## Installation
+# Installation
 
-### 1. Clone the repository
+## 1. Clone the Repository
 
-    git clone https://github.com/spencermc77/django-news-capstone.git
-    cd django-news-capstone
+```bash
+git clone https://github.com/spencermc77/django-news-capstone.git
+cd django-news-capstone
+```
 
-### 2. Install dependencies
+## 2. Create a Virtual Environment
 
-    pip install -r requirements.txt
+Create and activate a virtual environment before installing dependencies.
 
-### 3. Configure the database
+Windows:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Mac/Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+## 3. Install Dependencies
+
+Install required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+## 4. Configure Database
 
 This project uses MariaDB/MySQL.
 
-Update the database settings in:
+Update database settings inside:
 
-    news_project/settings.py
+```text
+news_project/settings.py
+```
 
-Example database settings:
+Example configuration:
 
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'news_db',
-            'USER': 'root',
-            'PASSWORD': 'root123',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'news_db',
+        'USER': 'root',
+        'PASSWORD': 'root123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
+}
+```
 
-Create a MariaDB database named:
+Create a database named:
 
-    news_db
+```text
+news_db
+```
 
-Run migrations:
+## 5. Run Migrations
 
-    python manage.py makemigrations
-    python manage.py migrate
-
-### 4. Run the application locally
-
-    python manage.py runserver
-
-Open the application in a browser:
-
-    http://127.0.0.1:8000
-
----
-
-## Docker Setup
-
-Build the Docker image:
-
-    docker build -t django-news-app .
-
-Run the Docker container:
-
-    docker run -p 8000:8000 django-news-app
-
-Open the application in a browser:
-
-    http://127.0.0.1:8000
-
-Notes:
-
-- This project uses MariaDB/MySQL.
-- If running locally, MariaDB should be running before migrations.
-- If running through Docker, database networking or external database configuration may be required.
-- The Dockerfile is located in the root directory of this repository.
-
----
-
-## Database Setup for Docker
-
-Before running the Docker container, ensure that the MariaDB database already exists and migrations have been applied.
-
-Run migrations locally before starting Docker:
+Run migrations before starting the server:
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-If using MariaDB installed on the host machine, update the database host in:
+## 6. Run Application Locally
 
-    news_project/settings.py
-
-Change:
-
-```python
-'HOST': '127.0.0.1'
+```bash
+python manage.py runserver
 ```
 
-To:
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+# Docker Setup
+
+The Dockerfile is located in the root directory.
+
+## Build Docker Image
+
+```bash
+docker build -t django-news-app .
+```
+
+## Database Configuration for Docker
+
+Docker containers run in isolated environments.
+
+If MariaDB is running locally on Windows, update:
 
 ```python
 'HOST': 'host.docker.internal'
 ```
 
-This allows the Docker container to connect to the MariaDB server running on the Windows host machine.
+instead of:
 
-Docker creates an isolated environment, so localhost inside the container refers to the container itself, not the host machine.
+```python
+'HOST': '127.0.0.1'
+```
 
-If running MariaDB in a separate Docker container, update the HOST value to the database container name and configure both containers to share the same Docker network.
-## Running Tests
+This allows Docker containers to connect to MariaDB running on the host machine.
 
-Run the test suite:
+If running MariaDB in another container, replace HOST with the database container name.
 
-    python manage.py test
+## Run Migrations Before Docker Startup
+
+Ensure the database exists and migrations have already been applied:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+## Run Docker Container
+
+```bash
+docker run -p 8000:8000 django-news-app
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
 
 ---
 
-## API Endpoint
+# Running Tests
+
+Run:
+
+```bash
+python manage.py test
+```
+
+---
+
+# API Endpoint
 
 Article approval endpoint:
 
-    /api/approved/
+```text
+/api/approved/
+```
 
 ---
 
-## Diagrams Included
+# Diagrams Included
 
-The project includes:
+Project diagrams include:
 
 - Use Case Diagram
 - Class Diagram
 - Sequence Diagram
 
-These diagrams are located in:
+Location:
 
-    diagrams/
-
----
-
-## Documentation
-
-Sphinx documentation is located in:
-
-    docs/build/html/index.html
-
-Open this file to view the documentation.
+```text
+diagrams/
+```
 
 ---
 
-## Author
+# Documentation
+
+Sphinx documentation is located at:
+
+```text
+docs/build/html/index.html
+```
+
+Open this file in a browser to view generated documentation.
+
+---
+
+# Author
 
 Spencer McNamara
