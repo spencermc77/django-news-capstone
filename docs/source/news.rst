@@ -1,22 +1,37 @@
-News App
-========
+news package
+============
 
-.. automodule:: news
-   :members:
-   :undoc-members:
-   :show-inheritance:
+The news package contains the main application logic for the Django News Application.
 
-.. automodule:: news.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Submodules
+----------
 
-.. automodule:: news.views
-   :members:
-   :undoc-members:
-   :show-inheritance:
+news.models module
+------------------
 
-.. automodule:: news.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Contains the database models for the application, including users, publishers, articles, newsletters, and subscriptions.
+
+news.views module
+-----------------
+
+Contains the view functions used to display pages, manage articles, manage newsletters, approve content, and handle subscriptions.
+
+news.forms module
+-----------------
+
+Contains the forms used for creating and editing articles, newsletters, publishers, and user-related content.
+
+news.urls module
+----------------
+
+Contains the URL patterns for the news application.
+
+news.admin module
+-----------------
+
+Registers application models with the Django admin site.
+
+news.apps module
+----------------
+
+Contains the Django app configuration for the news application.
